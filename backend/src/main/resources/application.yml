@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: virma
+  jpa:
+    show-sql: false
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    url: jdbc:postgresql://localhost:5432/virma
+    username: test
+    password: test
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
