@@ -14,8 +14,9 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class UserEntity {
+    @Id
     private Long id;
     private String username;
     @Column(name = "profile_url")

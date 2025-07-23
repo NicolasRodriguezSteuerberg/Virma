@@ -17,7 +17,8 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public void createUser(@RequestBody @Valid UserCreateRequest userCreateRequest) {
-        userService.saveUser(userCreateRequest);
+    public void createUser(@RequestBody UserCreateRequest userCreateRequest) {
+        // ToDo agregar la autenticacion y recoger el id del JwtToken
+        userService.saveUser(userCreateRequest, 1L);
     }
 }

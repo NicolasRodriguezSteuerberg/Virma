@@ -2,14 +2,17 @@ spring:
   application:
     name: virma
   jpa:
-    show-sql: false
+    show-sql: true
     generate-ddl: false
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
+    database: POSTGRESQL
+    defer-datasource-initialization: true
   datasource:
+    driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/virma
-    username: test
-    password: test
+    username: virma
+    password: virma
   servlet:
     multipart:
       max-file-size: 1GB

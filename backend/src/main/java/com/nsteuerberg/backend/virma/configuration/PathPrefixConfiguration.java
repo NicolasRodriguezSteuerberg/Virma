@@ -10,6 +10,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class PathPrefixConfiguration implements WebMvcConfigurer {
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
-        configurer.addPathPrefix("/api/", HandlerTypePredicate.forAnnotation(RestController.class));
+        configurer.addPathPrefix("/virma/api/", HandlerTypePredicate.forAnnotation(RestController.class));
     }
 }

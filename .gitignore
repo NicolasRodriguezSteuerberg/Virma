@@ -1,6 +1,10 @@
 ## MAC ##
 .DS_Store
 
+# Docker
+docker-compose.yml
+nginx.conf
+
 
 ## Spring ##
 target/

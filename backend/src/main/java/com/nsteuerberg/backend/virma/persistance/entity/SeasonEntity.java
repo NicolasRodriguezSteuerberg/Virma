@@ -1,7 +1,6 @@
 package com.nsteuerberg.backend.virma.persistance.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +13,10 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "season")
 public class SeasonEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private SerieEntity serieEntity;
+    // ToDo hacer la n->m
+    //private SerieEntity serieEntity;
     private int number;
 }

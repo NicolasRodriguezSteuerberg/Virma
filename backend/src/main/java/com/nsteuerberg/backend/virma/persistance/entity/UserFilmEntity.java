@@ -18,12 +18,12 @@ public class UserFilmEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
-    private UserEntity userEntity;
+    private UserEntity user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("filmId")
-    private FilmEntity filmEntity;
-    private Boolean finished;
+    private FilmEntity film;
+    private Boolean liked;
     @Column(name = "wathched_seconds")
     private Integer watchedSeconds;
 }

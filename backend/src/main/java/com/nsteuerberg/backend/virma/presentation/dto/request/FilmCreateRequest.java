@@ -4,6 +4,7 @@ public record FilmCreateRequest(
         String title,
         String description,
         String coverUrl,
-        String fileUrl
+        String fileUrl,
+        Integer durationSeconds
 ) {
 }
