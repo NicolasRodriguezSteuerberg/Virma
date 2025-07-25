@@ -1,5 +1,6 @@
 ## MAC ##
 .DS_Store
+Thumbs.db
 
 # Docker
 docker-compose.yml
@@ -7,124 +8,98 @@ nginx.conf
 
 
 ## Spring ##
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Archivos de compilación
+backend/target/
+backend/build/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
+# Archivos de configuración de Maven
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+
+# Archivos de configuración de Gradle
+backend/.gradle/
+backend/gradle-app.setting
+backend/gradlew
+backend/gradlew.bat
+
+# Logs y archivos temporales
+backend/*.log
+backend/*.tmp
+backend/tmp/
+backend/out/
+
+# Configuraciones de IDE
+backend/.idea/
+backend/.project
+backend/.classpath
+backend/.settings/
+backend/.vscode/
+
+# Ignorar archivos generados por pruebas
+backend/test-output/
+backend/jacoco.exec
+
+# Archivos de empaquetado o ejecutables
+backend/*.jar
+backend/*.war
+backend/*.ear
 
 ## FLUTTER
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.build/
-.buildlog/
-.history
-.svn/
-.swiftpm/
-migrate_working_dir/
+# Ignorar archivos y carpetas de Flutter dentro de frontend
+frontend/.dart_tool/
+frontend/.idea/
+frontend/.vscode/
+frontend/.packages
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+frontend/.metadata
+frontend/build/
+frontend/ios/Flutter/Flutter.framework
+frontend/ios/Flutter/Flutter.podspec
+frontend/ios/Pods/
+frontend/ios/.symlinks/
+frontend/ios/Flutter/ephemeral/
+frontend/ios/Runner.xcworkspace/
+frontend/macos/Flutter/ephemeral/
+frontend/macos/Pods/
+frontend/linux/flutter/ephemeral/
+frontend/windows/flutter/ephemeral/
+frontend/web/.dart_tool/
 
-# IntelliJ related
+# Archivos generados por pub
+frontend/pubspec.lock
+
+# Archivos de compilación para Android
+frontend/android/.gradle/
+frontend/android/captures/
+frontend/android/.idea/
+frontend/android/local.properties
+frontend/android/build/
+
+# Archivos de compilación para iOS
+frontend/ios/Flutter/App.framework
+frontend/ios/Flutter/Flutter.podspec
+frontend/ios/build/
+frontend/ios/Pods/
+frontend/ios/Podfile.lock
+frontend/ios/.symlinks/
+
+# Archivos de compilación para web
+frontend/web/build/
+
+# Archivos de configuración para VS Code
+frontend/.vscode/
+
+# Archivos de configuración para Xcode
+frontend/ios/Runner.xcworkspace/
+frontend/macos/Runner.xcworkspace/
+
+# Otros posibles archivos temporales
 *.iml
 *.ipr
 *.iws
-.idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.pub-cache/
-.pub/
-/build/
-
-# Symbolication related
-app.*.symbols
-
-# Obfuscation related
-app.*.map.json
-
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
-
-# android
-gradle-wrapper.jar
-/.gradle
-/captures/
-/gradlew
-/gradlew.bat
-/local.properties
-GeneratedPluginRegistrant.java
-.cxx/
-
-# Remember to never publicly share your keystore.
-# See https://flutter.dev/to/reference-keystore
-key.properties
-**/*.keystore
-**/*.jks
-
-# IOS
-**/dgph
-*.mode1v3
-*.mode2v3
-*.moved-aside
-*.pbxuser
-*.perspectivev3
-**/*sync/
-.sconsign.dblite
-.tags*
-**/.vagrant/
-**/DerivedData/
-Icon?
-**/Pods/
-**/.symlinks/
-profile
-xcuserdata
-**/.generated/
-Flutter/App.framework
-Flutter/Flutter.framework
-Flutter/Flutter.podspec
-Flutter/Generated.xcconfig
-Flutter/ephemeral/
-Flutter/app.flx
-Flutter/app.zip
-Flutter/flutter_assets/
-Flutter/flutter_export_environment.sh
-ServiceDefinitions.json
-Runner/GeneratedPluginRegistrant.*
-
-# Exceptions to above rules.
-!default.mode1v3
-!default.mode2v3
-!default.pbxuser
-!default.perspectivev3
-
-# Flutter - linux
-flutter/ephemeral
+*.log
+*.tmp
+*.swp
