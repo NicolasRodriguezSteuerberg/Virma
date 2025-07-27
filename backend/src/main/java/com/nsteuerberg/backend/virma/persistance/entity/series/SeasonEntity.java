@@ -37,9 +37,11 @@ public class SeasonEntity {
     @OneToMany(
             mappedBy = "season",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
     @OrderBy("number ASC")
+    @Builder.Default // para que lo agregue al crear una temporada
     private List<EpisodeEntity> episodeEntities = new ArrayList<>();
 
     public void addEpisode(EpisodeEntity episode) {

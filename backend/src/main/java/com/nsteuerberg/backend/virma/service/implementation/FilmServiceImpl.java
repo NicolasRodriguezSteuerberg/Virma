@@ -100,7 +100,7 @@ public class FilmServiceImpl implements IFilmService {
                         .number(filmEntityPage.getNumber())
                         .size(filmEntityPage.getSize())
                         .totalPages(filmEntityPage.getTotalPages())
-                        .totalElements(filmEntityPage.getNumberOfElements())
+                        .totalElements(filmEntityPage.getTotalElements())
                         .last(filmEntityPage.isLast())
                         .build()
         );

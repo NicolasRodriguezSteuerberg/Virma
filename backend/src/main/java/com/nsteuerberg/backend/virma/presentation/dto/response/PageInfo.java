@@ -6,7 +6,7 @@ import lombok.Builder;
 public record PageInfo (
         int number,
         int size,
-        int totalElements,
+        long totalElements,
         int totalPages,
         boolean last
 ){

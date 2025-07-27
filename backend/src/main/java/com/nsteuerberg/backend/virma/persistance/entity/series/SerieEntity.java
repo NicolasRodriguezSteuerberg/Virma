@@ -37,9 +37,11 @@ public class SerieEntity {
     @OneToMany(
             mappedBy = "serie",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
     @OrderBy("number ASC")
+    @Builder.Default
     private List<SeasonEntity> seasonEntities = new ArrayList<>();
 
     public void addSeason(SeasonEntity season) {

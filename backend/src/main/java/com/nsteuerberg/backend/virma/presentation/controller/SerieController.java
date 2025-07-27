@@ -4,10 +4,8 @@ import com.nsteuerberg.backend.virma.presentation.dto.request.serie.create.Episo
 import com.nsteuerberg.backend.virma.presentation.dto.request.serie.create.SeasonCreateRequest;
 import com.nsteuerberg.backend.virma.presentation.dto.request.serie.create.SerieCreateRequest;
 import com.nsteuerberg.backend.virma.presentation.dto.response.PagedResponse;
-import com.nsteuerberg.backend.virma.presentation.dto.response.serie.EpisodeInfoResponse;
-import com.nsteuerberg.backend.virma.presentation.dto.response.serie.SeasonEpisodeResponse;
-import com.nsteuerberg.backend.virma.presentation.dto.response.serie.SerieInfoResponse;
-import com.nsteuerberg.backend.virma.presentation.dto.response.serie.SerieSeasonEpidoseResponse;
+import com.nsteuerberg.backend.virma.presentation.dto.response.serie.*;
+import com.nsteuerberg.backend.virma.service.implementation.SerieServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -16,11 +14,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("series")
 public class SerieController {
+    private final SerieServiceImpl serieService;
+
+    public SerieController(SerieServiceImpl serieService) {
+        this.serieService = serieService;
+    }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public PagedResponse<SerieInfoResponse> serieInfoResponsePagedResponse (Pageable pageable) {
         // ToDo por hacer
-        return null;
+        return serieService.getPageableSerieInfo(pageable);
     }
 
     @GetMapping("info/{id}")
@@ -29,15 +33,16 @@ public class SerieController {
             @PathVariable Long id
     ) {
         // ToDo recoger la info del usuario para poder mostrar si vio algun epidosdio
-        return null;
+        return serieService.getSerieCompleteInfo(id);
     }
 
     @GetMapping("episode/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public EpisodeInfoResponse getEpisode(
-            @PathVariable Long id
+    public EpisodeReproduceResponse getEpisode(
+            @PathVariable(name = "id") Long episodeId
     ) {
-        return null;
+        // ToDo recoger el usuario, 1 para pruebas
+        return serieService.getEpisode(episodeId, 1L);
     }
 
     @PostMapping
@@ -45,8 +50,7 @@ public class SerieController {
     public SerieSeasonEpidoseResponse createSerie(
             @RequestBody @Valid SerieCreateRequest serieCreateRequest
     ) {
-        // ToDo crear la serei
-        return null;
+        return serieService.createSerie(serieCreateRequest);
     }
 
     @PostMapping("{id}/seasons")
@@ -55,8 +59,7 @@ public class SerieController {
             @RequestBody @Valid SeasonCreateRequest seasonCreateRequest,
             @PathVariable(name = "id") Long serieId
     ) {
-        // ToDo crear la seasaon
-        return null;
+        return serieService.createSeason(serieId, seasonCreateRequest);
     }
 
     @PostMapping("{serieId}/seasons/{seasonId}")
@@ -66,7 +69,6 @@ public class SerieController {
             @PathVariable(name = "seasonId") Long seasonId,
             @RequestBody @Valid EpisodeCreateRequest episodeCreateRequest
     ){
-        // ToDo crear episodio
-        return null;
+        return serieService.createEpisode(serieId, seasonId, episodeCreateRequest);
     }
 }
