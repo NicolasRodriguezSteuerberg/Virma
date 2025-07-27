@@ -1,23 +1,25 @@
-package com.nsteuerberg.backend.virma.persistance.entity;
+package com.nsteuerberg.backend.virma.persistance.entity.series;
 
+import com.nsteuerberg.backend.virma.persistance.entity.movies.UserFilmId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Embeddable
-public class UserFilmId implements Serializable {
+public class UserEpisodeId {
     @Column(name = "user_id")
     private Long userId;
-    @Column(name = "film_id")
-    private Long filmId;
+    @Column(name = "episode_id")
+    private Long episodeId;
 
     @Override
     public boolean equals(Object o) {
@@ -26,13 +28,13 @@ public class UserFilmId implements Serializable {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        UserFilmId that = (UserFilmId) o;
+        UserEpisodeId that = (UserEpisodeId) o;
         return Objects.equals(userId, that.userId) &&
-                Objects.equals(filmId, that.filmId);
+                Objects.equals(episodeId, that.episodeId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, filmId);
+        return Objects.hash(userId, episodeId);
     }
 }

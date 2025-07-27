@@ -1,6 +1,6 @@
-package com.nsteuerberg.backend.virma.persistance.repository;
+package com.nsteuerberg.backend.virma.persistance.repository.movie;
 
-import com.nsteuerberg.backend.virma.persistance.entity.FilmEntity;
+import com.nsteuerberg.backend.virma.persistance.entity.movies.FilmEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

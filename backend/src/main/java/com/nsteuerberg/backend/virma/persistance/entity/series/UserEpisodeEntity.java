@@ -1,5 +1,6 @@
-package com.nsteuerberg.backend.virma.persistance.entity;
+package com.nsteuerberg.backend.virma.persistance.entity.series;
 
+import com.nsteuerberg.backend.virma.persistance.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,20 +11,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+// ToDo hacer el userepisode
+/*
 @Entity
-@Table(name = "user_film")
-public class UserFilmEntity {
+@Table(name = "user_episode")
+ */
+public class UserEpisodeEntity {
     @EmbeddedId
-    private UserFilmId id;
+    private UserEpisodeId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
     private UserEntity user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("filmId")
-    private FilmEntity film;
-    private Boolean liked;
-    @Column(name = "wathched_seconds")
+    @MapsId("episodeId")
+    private EpisodeEntity episode;
+
+    @Column(name = "watched_seconds")
     private Integer watchedSeconds;
 }

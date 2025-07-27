@@ -1,8 +1,8 @@
-package com.nsteuerberg.backend.virma.persistance.repository;
+package com.nsteuerberg.backend.virma.persistance.repository.movie;
 
-import com.nsteuerberg.backend.virma.persistance.entity.FilmEntity;
-import com.nsteuerberg.backend.virma.persistance.entity.UserFilmEntity;
-import com.nsteuerberg.backend.virma.persistance.entity.UserFilmId;
+import com.nsteuerberg.backend.virma.persistance.entity.movies.FilmEntity;
+import com.nsteuerberg.backend.virma.persistance.entity.movies.UserFilmEntity;
+import com.nsteuerberg.backend.virma.persistance.entity.movies.UserFilmId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

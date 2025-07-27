@@ -1,9 +1,9 @@
 package com.nsteuerberg.backend.virma.service.implementation;
 
 import com.nsteuerberg.backend.virma.persistance.entity.UserEntity;
-import com.nsteuerberg.backend.virma.persistance.entity.UserFilmEntity;
-import com.nsteuerberg.backend.virma.persistance.entity.UserFilmId;
-import com.nsteuerberg.backend.virma.persistance.repository.IUserFilmRepository;
+import com.nsteuerberg.backend.virma.persistance.entity.movies.UserFilmEntity;
+import com.nsteuerberg.backend.virma.persistance.entity.movies.UserFilmId;
+import com.nsteuerberg.backend.virma.persistance.repository.movie.IUserFilmRepository;
 import com.nsteuerberg.backend.virma.persistance.repository.IUserRepository;
 import com.nsteuerberg.backend.virma.presentation.dto.request.FilmWatchedRequest;
 import com.nsteuerberg.backend.virma.presentation.dto.request.UserCreateRequest;

@@ -1,5 +1,7 @@
 package com.nsteuerberg.backend.virma.persistance.entity;
 
+import com.nsteuerberg.backend.virma.persistance.entity.movies.UserFilmEntity;
+import com.nsteuerberg.backend.virma.persistance.entity.series.UserSerieEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,10 +23,21 @@ public class UserEntity {
     private String username;
     @Column(name = "profile_url")
     private String profileUrl;
+
     @OneToMany(
             mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     private List<UserFilmEntity> moviesWatched = new ArrayList<>();
+
+    /*
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<UserSerieEntity> seriesWatched = new ArrayList<>();
+
+     */
 }

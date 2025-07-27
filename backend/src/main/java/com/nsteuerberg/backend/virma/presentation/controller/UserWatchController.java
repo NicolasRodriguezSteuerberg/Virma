@@ -14,7 +14,7 @@ public class UserWatchController {
         this.userService = userService;
     }
 
-    @PostMapping("film")
+    @PostMapping("movie")
     @ResponseStatus(HttpStatus.OK)
     public void addFilmWatched(@RequestBody FilmWatchedRequest filmWatchedRequest) {
         // ToDo cambiar para cuando haya autenticacion

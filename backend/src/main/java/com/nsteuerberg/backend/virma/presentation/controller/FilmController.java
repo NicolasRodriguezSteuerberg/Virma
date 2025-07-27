@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URI;
 import java.nio.file.Paths;
 
 @RestController
-@RequestMapping("film")
+@RequestMapping("movie")
 public class FilmController {
     private final FilmServiceImpl filmService;
 
@@ -22,13 +23,12 @@ public class FilmController {
         this.filmService = filmService;
     }
 
-    @PostMapping("")
+    @PostMapping()
     @ResponseStatus(HttpStatus.ACCEPTED)
     // ToDo cambiarlo por created
     public void createFilm(@RequestBody @Valid FilmCreateRequest filmCreateRequest) throws FileNotFoundException {
-        File filmFile = Paths.get(filmCreateRequest.fileUrl()).toFile();
-        if (!filmFile.exists() || !filmFile.isFile() || !filmFile.getName().endsWith("m3u8")) {
-            throw new FileNotFoundException("No existe el archivo de la pelicula o no es valido");
+        if (!filmService.isUrlValid(filmCreateRequest.fileUrl())) {
+            throw new FileNotFoundException("No existe el archivo o no pertenece al servidor");
         }
         filmService.saveFilm(filmCreateRequest);
     }

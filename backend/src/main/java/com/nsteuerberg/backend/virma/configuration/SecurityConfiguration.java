@@ -26,6 +26,7 @@ public class SecurityConfiguration {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
                         // ToDo cambiar el permitir todos
+                        // agregar permiso MODERATOR a lo de agregar peliculas y series
                         .anyRequest().permitAll()
                 )
                 //.addFilterBefore(jwtFilter, BasicAuthenticationFilter.class)

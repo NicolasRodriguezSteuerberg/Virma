@@ -1,4 +1,4 @@
-package com.nsteuerberg.backend.virma.persistance.entity;
+package com.nsteuerberg.backend.virma.persistance.entity.movies;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
