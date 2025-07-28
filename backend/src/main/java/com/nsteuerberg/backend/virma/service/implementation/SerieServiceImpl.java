@@ -74,14 +74,16 @@ public class SerieServiceImpl implements ISerieService {
         log.info("GET_EPISODE:: Recogiendo la informacion del episodio {} para el usuario {}", episodeId, userId);
         EpisodeEntity episode = episodeRepository.findById(episodeId).orElseThrow();
         SeasonEntity season = episode.getSeason();
+        Long serieId = season.getId();
         // recogemos el siguiente episodio
         EpisodeEntity nextEpisode = episodeRepository.findNextInSameSeason(season.getId(), episode.getNumber()+1)
-                .orElse(episodeRepository.findFirstInNextSeason(season.getSerie().getId(), season.getNumber()+1)
+                .orElse(episodeRepository.findFirstInNextSeason(serieId, season.getNumber()+1)
                         .orElse(null)
                 );
         log.info("GET_EPISODE:: Devolviendo la respuesta de la informacion del episodio {} para el usuario {}", episodeId, userId);
         return EpisodeReproduceResponse.builder()
-                .id(episodeId)
+                .serieId(serieId)
+                .episodeId(episodeId)
                 .number(episode.getNumber())
                 .fileUrl(commonMediaService.createUrlByEndpoint(episode.getFileUrl()))
                 .durationSeconds(episode.getDurationSeconds())

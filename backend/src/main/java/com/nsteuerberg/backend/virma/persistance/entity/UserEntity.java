@@ -1,6 +1,7 @@
 package com.nsteuerberg.backend.virma.persistance.entity;
 
 import com.nsteuerberg.backend.virma.persistance.entity.movies.UserFilmEntity;
+import com.nsteuerberg.backend.virma.persistance.entity.series.UserEpisodeEntity;
 import com.nsteuerberg.backend.virma.persistance.entity.series.UserSerieEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,6 @@ public class UserEntity {
     )
     private List<UserFilmEntity> moviesWatched = new ArrayList<>();
 
-    /*
     @OneToMany(
             mappedBy = "user",
             cascade = CascadeType.ALL,
@@ -39,5 +39,10 @@ public class UserEntity {
     )
     private List<UserSerieEntity> seriesWatched = new ArrayList<>();
 
-     */
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<UserEpisodeEntity> episodeWatched = new ArrayList<>();
 }

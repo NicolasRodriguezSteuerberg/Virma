@@ -4,7 +4,8 @@ import lombok.Builder;
 
 @Builder
 public record EpisodeReproduceResponse(
-        Long id,
+        Long serieId,
+        Long episodeId,
         Integer number,
         // Es posible que no haga falta, ya que los reproductores saben cuanto dura
         Integer durationSeconds,

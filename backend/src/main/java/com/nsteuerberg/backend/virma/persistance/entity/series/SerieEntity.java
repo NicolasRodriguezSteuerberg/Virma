@@ -25,14 +25,13 @@ public class SerieEntity {
     // ToDo hacer que no sea null
     @Column(name = "cover_url")
     private String coverUrl;
-    /*
+
     @OneToMany(
             mappedBy = "serie",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     private List<UserSerieEntity> userSerieEntities = new ArrayList<>();
-     */
 
     @OneToMany(
             mappedBy = "serie",

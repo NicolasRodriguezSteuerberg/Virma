@@ -7,14 +7,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-/* ToDO hacer el userSerie
 @Entity
 @Table(name = "user_serie")
- */
 public class UserSerieEntity {
     @EmbeddedId
     private UserSerieId id;
@@ -31,5 +31,5 @@ public class UserSerieEntity {
     @Column(name = "last_episode_id")
     private Long lastEpisodeId;
     @Column(name = "last_time_watched")
-    private String lastTimeWatched;
+    private LocalDateTime lastTimeWatched;
 }

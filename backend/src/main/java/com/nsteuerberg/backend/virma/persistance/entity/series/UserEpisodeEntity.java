@@ -11,11 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-// ToDo hacer el userepisode
-/*
 @Entity
 @Table(name = "user_episode")
- */
 public class UserEpisodeEntity {
     @EmbeddedId
     private UserEpisodeId id;

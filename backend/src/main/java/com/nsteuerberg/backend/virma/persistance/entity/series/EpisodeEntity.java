@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -41,4 +43,11 @@ public class EpisodeEntity {
             nullable = false
     )
     private SeasonEntity season;
+
+    @OneToMany(
+            mappedBy = "episode",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<UserEpisodeEntity> userEpisodeEntities;
 }
