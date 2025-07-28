@@ -8,6 +8,7 @@ public record EpisodeInfoResponse (
         Long id,
         Integer number,
         String coverUrl,
-        Integer durationSeconds
+        Integer durationSeconds,
+        Integer userWatchedSeconds
 ){
 }

@@ -33,7 +33,7 @@ public class SerieController {
             @PathVariable Long id
     ) {
         // ToDo recoger la info del usuario para poder mostrar si vio algun epidosdio
-        return serieService.getSerieCompleteInfo(id);
+        return serieService.getSerieCompleteInfo(id, 1L);
     }
 
     @GetMapping("episode/{id}")

@@ -1,11 +1,11 @@
 package com.nsteuerberg.backend.virma.service.implementation;
 
-import com.nsteuerberg.backend.virma.persistance.entity.series.EpisodeEntity;
-import com.nsteuerberg.backend.virma.persistance.entity.series.SeasonEntity;
-import com.nsteuerberg.backend.virma.persistance.entity.series.SerieEntity;
+import com.nsteuerberg.backend.virma.persistance.entity.series.*;
 import com.nsteuerberg.backend.virma.persistance.repository.series.IEpisodeRepository;
 import com.nsteuerberg.backend.virma.persistance.repository.series.ISeasonRepository;
 import com.nsteuerberg.backend.virma.persistance.repository.series.ISerieRepository;
+import com.nsteuerberg.backend.virma.persistance.repository.user.IUserEpisodeRepository;
+import com.nsteuerberg.backend.virma.persistance.repository.user.IUserSerieRepository;
 import com.nsteuerberg.backend.virma.presentation.dto.request.serie.create.EpisodeCreateRequest;
 import com.nsteuerberg.backend.virma.presentation.dto.request.serie.create.SeasonCreateRequest;
 import com.nsteuerberg.backend.virma.presentation.dto.request.serie.create.SerieCreateRequest;
@@ -19,9 +19,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class SerieServiceImpl implements ISerieService {
@@ -30,12 +31,14 @@ public class SerieServiceImpl implements ISerieService {
     private final ISerieRepository serieRepository;
     private final ISeasonRepository seasonRepository;
     private final IEpisodeRepository episodeRepository;
+    private final UserServiceImpl userService;
     private final CommonMediaServiceImpl commonMediaService;
 
-    public SerieServiceImpl(ISerieRepository serieRepository, ISeasonRepository seasonRepository, IEpisodeRepository episodeRepository, CommonMediaServiceImpl commonMediaService) {
+    public SerieServiceImpl(ISerieRepository serieRepository, ISeasonRepository seasonRepository, IEpisodeRepository episodeRepository, UserServiceImpl userService, CommonMediaServiceImpl commonMediaService) {
         this.serieRepository = serieRepository;
         this.seasonRepository = seasonRepository;
         this.episodeRepository = episodeRepository;
+        this.userService = userService;
         this.commonMediaService = commonMediaService;
     }
 
@@ -61,18 +64,24 @@ public class SerieServiceImpl implements ISerieService {
     }
 
     @Override
-    public SerieSeasonEpidoseResponse getSerieCompleteInfo(Long serieId) {
+    public SerieSeasonEpidoseResponse getSerieCompleteInfo(Long serieId, Long userId) {
         log.info("GET_SERIE_COMPLETE_INFO:: Recogiendo la informacion completa de la serie: {}", serieId);
         SerieEntity serieEntity = serieRepository.findById(serieId).orElseThrow();
         log.info("GET_SERIE_COMPLETE_INFO:: Construyendo la informacion completa de la serie: {}", serieId);
-        // ToDo agregar la informacion del usuario
-        return createSerieSeasonEpisodeResponse(serieEntity);
+
+        Map<Long, Integer> userEpisodeEntities = userService.getAllEpisodeFromSerieWathced(userId, serieId).stream()
+                .collect(Collectors.toMap(
+                        userEpisodeEntity -> userEpisodeEntity.getEpisode().getId(),
+                        UserEpisodeEntity::getWatchedSeconds
+                ));
+        return createSerieSeasonEpisodeResponse(serieEntity, userEpisodeEntities);
     }
 
     @Override
     public EpisodeReproduceResponse getEpisode(Long episodeId, Long userId) {
         log.info("GET_EPISODE:: Recogiendo la informacion del episodio {} para el usuario {}", episodeId, userId);
         EpisodeEntity episode = episodeRepository.findById(episodeId).orElseThrow();
+        UserEpisodeEntity userEpisodeEntity = userService.getUserEpisodeEntity(userId, episode);
         SeasonEntity season = episode.getSeason();
         Long serieId = season.getId();
         // recogemos el siguiente episodio
@@ -87,7 +96,7 @@ public class SerieServiceImpl implements ISerieService {
                 .number(episode.getNumber())
                 .fileUrl(commonMediaService.createUrlByEndpoint(episode.getFileUrl()))
                 .durationSeconds(episode.getDurationSeconds())
-                .watchedSeconds(0) // ToDo cambiar cuando se tenga lo del usuario
+                .watchedSeconds(userEpisodeEntity.getWatchedSeconds()) // ToDo cambiar cuando se tenga lo del usuario
                 .nextEpisode(nextEpisode!=null
                     ? new NextEpisodeResponse(nextEpisode.getId(), nextEpisode.getNumber())
                     : null
@@ -121,7 +130,7 @@ public class SerieServiceImpl implements ISerieService {
         log.info("CREATE_SERIE:: Construyendo la respuesta para la serie {}", serieCreateRequest.title());
 
 
-        return createSerieSeasonEpisodeResponse(saveSerie);
+        return createSerieSeasonEpisodeResponse(saveSerie, null);
     }
 
     @Override
@@ -138,7 +147,7 @@ public class SerieServiceImpl implements ISerieService {
         season.setSerie(serie);
         log.info("CREATE_SEASON:: Guardando la temporada {} de la serie {}", season.getNumber(), serie.getTitle());
         SeasonEntity savedSeason = seasonRepository.save(season);
-        return createSeasonInfoResponse(savedSeason);
+        return createSeasonInfoResponse(savedSeason, null);
     }
 
     @Override
@@ -157,7 +166,7 @@ public class SerieServiceImpl implements ISerieService {
                 .season(season)
                 .build();
         EpisodeEntity savedEpisode = episodeRepository.save(episode);
-        return createEpisodeInfoResponse(savedEpisode);
+        return createEpisodeInfoResponse(savedEpisode, null);
     }
 
 
@@ -186,13 +195,13 @@ public class SerieServiceImpl implements ISerieService {
                 });
     }
 
-    private SerieSeasonEpidoseResponse createSerieSeasonEpisodeResponse(SerieEntity serie) {
+    private SerieSeasonEpidoseResponse createSerieSeasonEpisodeResponse(SerieEntity serie, Map<Long, Integer> userWatchedSecondsEp) {
         return SerieSeasonEpidoseResponse.builder()
                 .serieInfo(createSerieInfo(serie))
                 .seasonList(serie.getSeasonEntities()==null
                         ? List.of()
                         : serie.getSeasonEntities().stream()
-                            .map(this::createSeasonInfoResponse)
+                            .map(season -> createSeasonInfoResponse(season, userWatchedSecondsEp))
                             .toList()
                 )
                 .build();
@@ -207,23 +216,26 @@ public class SerieServiceImpl implements ISerieService {
                 .build();
     }
 
-    private SeasonEpisodeResponse createSeasonInfoResponse(SeasonEntity season) {
+    private SeasonEpisodeResponse createSeasonInfoResponse(SeasonEntity season, Map<Long, Integer> userWatchedSecondsEp) {
         return SeasonEpisodeResponse.builder()
                 .id(season.getId())
                 .number(season.getNumber())
                 .episodeList(season.getEpisodeEntities()==null || season.getEpisodeEntities().isEmpty()
                         ? List.of()
                         : season.getEpisodeEntities().stream()
-                            .map(this::createEpisodeInfoResponse)
+                            .map(episode -> createEpisodeInfoResponse(episode, userWatchedSecondsEp))
                             .toList()
                 )
                 .build();
     }
 
-    private EpisodeInfoResponse createEpisodeInfoResponse(EpisodeEntity episode){
+    private EpisodeInfoResponse createEpisodeInfoResponse(EpisodeEntity episode, Map<Long, Integer> userWatchedSecondsEp){
+        Integer watchedSeconds = null;
+        if (userWatchedSecondsEp != null) watchedSeconds = userWatchedSecondsEp.get(episode.getId());
         return EpisodeInfoResponse.builder()
                 .id(episode.getId())
                 .durationSeconds(episode.getDurationSeconds())
+                .userWatchedSeconds(watchedSeconds)
                 .number(episode.getNumber())
                 .coverUrl(episode.getCoverUrl())
                 .build();

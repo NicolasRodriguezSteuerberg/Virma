@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -48,6 +49,11 @@ public class UserServiceImpl implements IUserService {
                     .username(userCreateRequest.username())
                     .build()
         );
+    }
+
+    @Override
+    public UserEntity getUserById(Long userId) {
+        return userRepository.findById(userId).orElseThrow();
     }
 
     @Override
@@ -84,6 +90,22 @@ public class UserServiceImpl implements IUserService {
         userEpisodeRepository.save(userEpisodeEntity);
         log.info("EPISODE WATCHED:: Agregando la informacion de la serie vista");
         serieWatchedEpisode(userEpisodeEntity.getUser(), episode.getSeason().getSerie(), episode.getId());
+    }
+
+    @Override
+    public UserEpisodeEntity getUserEpisodeEntity(Long userId, EpisodeEntity episode) {
+        UserEpisodeId userEpisodeId = new UserEpisodeId(userId, episode.getId());
+        return userEpisodeRepository.findById(userEpisodeId)
+                .orElseGet(() -> UserEpisodeEntity.builder()
+                        .user(getUserById(userId))
+                        .episode(episode)
+                        .watchedSeconds(0)
+                        .build()
+                );
+    }
+
+    public List<UserEpisodeEntity> getAllEpisodeFromSerieWathced(Long userId, Long serieId) {
+        return userEpisodeRepository.findByUserIdAndSerieId(userId, serieId);
     }
 
     /**
