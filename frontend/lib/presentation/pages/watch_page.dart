@@ -20,11 +20,12 @@ class _VideoState extends State<WatchPage>{
   void initState() {
     super.initState();
     _videoPlayerController = VideoPlayerController.networkUrl(
-      Uri.parse("http://192.168.101.103:9080/virma/series/rwby/02/04/index.m3u8")
+      Uri.parse("http://192.168.1.38:9080/virma/series/rwby/02/004/index.m3u8")
     )..initialize()
       .then((_) => setState(() {
         onUserEvent();
-      }));
+      }))
+      .catchError((e) => print(e));
     
     _videoPlayerController.addListener(() {
       if (_videoPlayerController.value.isInitialized) {
