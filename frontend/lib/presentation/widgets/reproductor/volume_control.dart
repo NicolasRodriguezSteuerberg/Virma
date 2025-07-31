@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/presentation/viewmodels/movie_watch_viewmodel.dart';
+import 'package:frontend/presentation/viewmodels/watch_common_viewmodel.dart';
 
 class VolumeControl extends StatelessWidget {
-  final MovieWatchViewmodel vm;
+  final WatchCommonViewmodel vm;
   const VolumeControl({required this.vm, super.key});
 
   @override

@@ -17,8 +17,8 @@ class MovieWatchPage extends StatelessWidget {
 
     // Lanzar carga de película al inicializar widget (solo una vez)
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!vm.isLoaded) {
-        vm.fetchMovieAndInit(filmId);
+      if (!vm.isLoaded && !vm.loading) {
+        vm.fetchAndInitController(filmId);
       }
     });
 

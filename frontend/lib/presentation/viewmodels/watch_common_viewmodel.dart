@@ -33,7 +33,7 @@ abstract class WatchCommonViewmodel extends ChangeNotifier {
   bool get showVolumeSlider => _showVolumeSlider;
 
   Future<void> fetchAndInitController(String id);
-  void changeToNextEpisode();
+  void changeToNextEpisode(BuildContext context);
 
   void setLoaded () {
     _isLoaded = true;
@@ -41,6 +41,7 @@ abstract class WatchCommonViewmodel extends ChangeNotifier {
 
   void setLoading(bool value) => _loading = value;
   void setError(bool value) => _error = value;
+  void setController(VideoPlayerController controller) => _controller = controller;
 
   void onUserEvent() {
     _hideTimer?.cancel();
@@ -50,10 +51,10 @@ abstract class WatchCommonViewmodel extends ChangeNotifier {
       notifyListeners();
     }
 
-    _startHideTimer();
+    startHideTimer();
   }
 
-  void _startHideTimer() {
+  void startHideTimer() {
     _hideTimer = Timer(const Duration(seconds: 3), () {
       _showControls = false;
       notifyListeners();

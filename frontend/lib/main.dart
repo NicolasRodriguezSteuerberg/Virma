@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:frontend/data/model/watch_movie.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:frontend/presentation/pages/movie_watch_page.dart';
 import 'package:frontend/presentation/pages/movies_page.dart';
+import 'package:frontend/presentation/pages/serie_page.dart';
+import 'package:frontend/presentation/pages/serie_watch_page.dart';
 import 'package:frontend/presentation/pages/series_page.dart';
 import 'package:frontend/presentation/viewmodels/movie_watch_viewmodel.dart';
 import 'package:frontend/presentation/viewmodels/movies_viewmodel.dart';
-import 'package:frontend/presentation/viewmodels/series_viewmodel.dart';
+import 'package:frontend/presentation/viewmodels/browse_series_viewmodel.dart';
+import 'package:frontend/presentation/viewmodels/serie_viewmodel.dart';
+import 'package:frontend/presentation/viewmodels/watch_serie_viewmodel.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:frontend/presentation/pages/watch_page.dart';
 
 void main() async{
   await dotenv.load(fileName: ".env");
+  setUrlStrategy(PathUrlStrategy());
+  GoRouter.optionURLReflectsImperativeAPIs = true;
   runApp(MyApp());
 }
 
@@ -79,9 +84,19 @@ class MyApp extends StatelessWidget {
           GoRoute(
             path: "/series",
             builder: (context, state) => ChangeNotifierProvider(
-              create: (_) => SeriesViewmodel(),
+              create: (_) => BrowseSeriesViewmodel(),
               child: const SeriesPage(),
             ),
+          ),
+          GoRoute(
+            path: "/serie/:id",
+            builder: (context, state) {
+              final String args = state.pathParameters["id"]!;
+              return ChangeNotifierProvider(
+                create: (_) => SerieViewmodel(int.parse(args)),
+                child: SeriePage(),
+              );
+            },
           ),
           GoRoute(
             path: "/movies",
@@ -93,13 +108,24 @@ class MyApp extends StatelessWidget {
           GoRoute(
             path: "/watch/movie/:id",
             builder: (context, state) {
-              final String args = state.pathParameters["id"]??"1";
+              print("HOLAAA????");
+              final String args = state.pathParameters["id"]!;
               return ChangeNotifierProvider(
                 create: (_) => MovieWatchViewmodel(),
                 child: MovieWatchPage(filmId: args,),
               );
             }
-          ), GoRoute(path: "/test", builder: (context, state) => WatchPage(),)
+          ),
+          GoRoute(
+            path: "/watch/serie/:episodeId",
+            builder: (context, state) {
+              final String args = state.pathParameters["episodeId"]!;
+              return ChangeNotifierProvider(
+                create: (_) => WatchSerieViewmodel(),
+                child: SerieWatchPage(episodeId: args),
+              );
+            },
+          ),
         ]
       )
     );

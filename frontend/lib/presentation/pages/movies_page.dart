@@ -48,7 +48,8 @@ class _MoviesPageState extends State<MoviesPage> {
                   title: vm.movies[i].film.title, 
                   imageUrl: vm.movies[i].film.coverUrl, 
                   duration: vm.movies[i].film.durationSeconds, 
-                  progress: vm.movies[i].userState.watchedSeconds
+                  progress: vm.movies[i].userState.watchedSeconds,
+                  isSerie: false,
                 ),
               ) 
             ),

@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:frontend/data/model/series.dart';
 
 
-class SeriesViewmodel extends ChangeNotifier{
+class BrowseSeriesViewmodel extends ChangeNotifier{
   late String backendUrl;
   bool _firstGet = false;
 
@@ -21,7 +21,7 @@ class SeriesViewmodel extends ChangeNotifier{
   bool get error => _error;
   bool get firstTry => _firstGet;
 
-  SeriesViewmodel(){
+  BrowseSeriesViewmodel(){
     backendUrl = dotenv.env["BACKEND_URL"]??"http://localhost:8080/virma/api";
   }
 

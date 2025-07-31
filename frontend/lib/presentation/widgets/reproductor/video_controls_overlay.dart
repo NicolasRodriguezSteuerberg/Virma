@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/presentation/viewmodels/movie_watch_viewmodel.dart';
+import 'package:frontend/presentation/viewmodels/watch_common_viewmodel.dart';
 import 'package:frontend/presentation/widgets/reproductor/playback_buttons.dart';
 import 'package:frontend/presentation/widgets/reproductor/progress_bar.dart';
 import 'package:frontend/presentation/widgets/reproductor/volume_control.dart';
 
 class VideoControlsOverlay extends StatelessWidget{
-  final MovieWatchViewmodel vm;
+  final WatchCommonViewmodel vm;
 
   const VideoControlsOverlay({required this.vm, super.key});
 

@@ -18,7 +18,9 @@ class SerieFilmCard extends StatelessWidget{
       width: 160,
       height: 250,
       child: GestureDetector(
-        onTap: () => context.push("/watch/movie/$id"),
+        onTap: () => isSerie
+          ? context.push("/serie/$id")
+          : context.push("/watch/movie/$id"),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
