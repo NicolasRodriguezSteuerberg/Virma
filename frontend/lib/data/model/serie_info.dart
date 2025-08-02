@@ -16,7 +16,6 @@ class SerieInfo {
         seasons.add(SeasonInfo.fromJson(element));
       }
     } 
-    print("Serie");
     return SerieInfo(
       jsonData["serieInfo"]["id"],
       jsonData["serieInfo"]["title"],

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:frontend/data/model/user_state.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:frontend/data/model/series.dart';
@@ -41,6 +40,9 @@ class BrowseSeriesViewmodel extends ChangeNotifier{
       final List<dynamic> seriesDynamicResponse = responseBody["content"]??[];
       final List<Series> seriesResponse = seriesDynamicResponse.map((item) => Series.fromJson(item)).toList();
       _series = seriesResponse;
+      for (int i = 0; i < seriesResponse.length; i++) {
+        print("COVER_URL ${seriesResponse[i].coverUrl}");
+      }
     } catch (e) {
       _error = true;
       print(e);

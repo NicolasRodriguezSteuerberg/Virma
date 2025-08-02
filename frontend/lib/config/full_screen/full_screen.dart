@@ -1,0 +1,1 @@
+export 'full_screen_noop.dart' if (dart.library.html) 'full_screen_web.dart';

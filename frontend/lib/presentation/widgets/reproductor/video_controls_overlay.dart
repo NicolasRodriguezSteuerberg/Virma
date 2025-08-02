@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/presentation/viewmodels/watch_common_viewmodel.dart';
-import 'package:frontend/presentation/widgets/reproductor/playback_buttons.dart';
+import 'package:frontend/presentation/widgets/reproductor/left_controls_buttons.dart';
 import 'package:frontend/presentation/widgets/reproductor/progress_bar.dart';
-import 'package:frontend/presentation/widgets/reproductor/volume_control.dart';
+import 'package:frontend/presentation/widgets/reproductor/right_controls_buttons.dart';
 
 class VideoControlsOverlay extends StatelessWidget{
   final WatchCommonViewmodel vm;
@@ -26,10 +26,9 @@ class VideoControlsOverlay extends StatelessWidget{
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              PlaybackButtons(vm: vm),
-              VolumeControl(vm: vm),
-              // ToDo manejar el boton de full screen
-              // IconButton(onPressed: onPressed, icon: icon)
+              LeftControlButtons(vm: vm),
+              Text(vm.title??""),
+              RightControlsButtons(vm: vm)
             ],
           )
         ]

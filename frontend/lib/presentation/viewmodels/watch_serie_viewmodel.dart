@@ -2,17 +2,19 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:frontend/data/model/watch_episode.dart';
+import 'package:frontend/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:frontend/presentation/viewmodels/watch_common_viewmodel.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:video_player/video_player.dart';
 
 class WatchSerieViewmodel extends WatchCommonViewmodel {
-  WatchSerieViewmodel(): super();
+  WatchSerieViewmodel(AuthProvider auth): super(auth: auth, isSerie: true);
 
   WatchEpisode? _info;
 
   WatchEpisode? get info => _info;
+
 
   @override
   Future<void> fetchAndInitController(String id) async{
@@ -29,7 +31,7 @@ class WatchSerieViewmodel extends WatchCommonViewmodel {
       if (!(response.statusCode >= 200 && response.statusCode < 300)) throw Exception("La peticion no ha sido exitosa");
       final responseBody = jsonDecode(response.body);
       _info = WatchEpisode.fromJson(responseBody);
-
+      setTitle("Capitulo ${_info!.episodeId}");
       VideoPlayerController _controller = VideoPlayerController.networkUrl(
         Uri.parse(_info!.fileUrl)
       );
@@ -55,9 +57,32 @@ class WatchSerieViewmodel extends WatchCommonViewmodel {
   }
   
   @override
-  void changeToNextEpisode(BuildContext context) {
+  void changeToNextEpisode(BuildContext context) async {
     if (_info!.nextEpisode != null && _info!.nextEpisode!.number != null){
-      context.pushReplacement("/watch/serie/${_info!.nextEpisode!.number}");
+      controller?.pause();
+      stopWatchTimer();
+      await updateWatchTime();
+      context.push("/watch/serie/${_info!.nextEpisode!.number}");
+    }
+  }
+
+  @override
+  Future<void> updateWatchTime() async {
+    final request = await http.post(
+      Uri.parse("$backendUrl/watch/episode"),
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': 'Bearer ${auth.accessToken}'
+      },
+      body: jsonEncode({
+        "serieId": _info!.serieId,
+        "episodeId": _info!.episodeId,
+        "watchedSeconds": controller!.value.position.inSeconds
+      })
+    );
+
+    if (request.statusCode!=200) {
+      print("error modificando el tiempo visto de la serie: ${request.body}");
     }
   }
   

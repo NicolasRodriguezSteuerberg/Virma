@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 
 class SeriePage extends StatefulWidget{
 
+  SeriePage({super.key});
+
 
   @override
   State<StatefulWidget> createState() => _SeriePageState();

@@ -5,7 +5,6 @@ import 'package:frontend/presentation/viewmodels/movie_watch_viewmodel.dart';
 import 'package:frontend/presentation/widgets/reproductor/video_controls_overlay.dart';
 import 'package:frontend/presentation/widgets/reproductor/video_player_container.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
 
 class MovieWatchPage extends StatelessWidget {
   final String filmId;

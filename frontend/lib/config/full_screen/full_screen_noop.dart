@@ -1,0 +1,7 @@
+
+
+void enterFullscreen() {
+}
+
+void exitFullscreen() {
+}
