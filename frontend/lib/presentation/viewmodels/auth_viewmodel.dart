@@ -17,17 +17,14 @@ class AuthProvider extends ChangeNotifier {
   String? get accessToken => _accessToken;
 
   AuthProvider() {
-    print("🟡 AuthProvider constructor called");
     backendUrl = dotenv.env["BACKEND_URL"] ?? "http://192.168.1.38:8080:8081/api/auth";
     backendUrl = "http://192.168.1.38:8081/api/auth";
     _init();
   }
 
   Future<void> _init() async {
-    print("🟢 AuthProvider _init() called");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _refreshToken = prefs.getString('refreshToken');
-    print("refreshToken;: $_refreshToken");
     if (_refreshToken != null) {
       await refreshAccessToken();
     }
@@ -44,7 +41,6 @@ class AuthProvider extends ChangeNotifier {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
       final data = jsonDecode(response.body);
       _accessToken = data['accessToken'];
       _refreshToken = data['refreshToken'];
@@ -57,13 +53,11 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     } else {
-      print(response.body);
       return false;
     }
   }
 
   Future<bool> refreshAccessToken() async {
-    print("refreshin token");
     if (_refreshToken == null) return false;
 
     final response = await http.patch(
@@ -73,9 +67,7 @@ class AuthProvider extends ChangeNotifier {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
       final data = jsonDecode(response.body);
-      print(data);
       _accessToken = data['accessToken'];
       _refreshToken = data['refreshToken'];
 
@@ -105,7 +97,6 @@ class AuthProvider extends ChangeNotifier {
 
     // Refrescar 60 segundos antes de que expire
     final refreshIn = duration - Duration(seconds: 60);
-    print("Refresh in: $refreshIn");
     if (refreshIn.isNegative) {
       // Si ya está expirado o próximo a expirar, refrescar inmediatamente
       refreshAccessToken();

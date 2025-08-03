@@ -34,7 +34,6 @@ class SeasonInfo {
   SeasonInfo(this.id, this.number, this.episodes);
 
   factory SeasonInfo.fromJson(Map<String, dynamic> jsonData) {
-    print("Season: $jsonData");
     List<EpisodeInfo> episodes = [];
 
     List<dynamic>? seasonInfo = jsonData["episodeList"];
@@ -62,7 +61,6 @@ class EpisodeInfo {
   EpisodeInfo(this.id, this.number, this.coverUrl, this.durationSeconds, this.watchedSeconds);
 
   factory EpisodeInfo.fromJson(Map<String, dynamic> jsonData) {
-    print("Episode: $jsonData");
     return EpisodeInfo(
       jsonData["id"],
       jsonData["number"],

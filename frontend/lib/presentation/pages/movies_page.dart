@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/presentation/viewmodels/movies_viewmodel.dart';
 import 'package:frontend/presentation/widgets/browse/serie_film_card.dart';
@@ -36,22 +37,28 @@ class _MoviesPageState extends State<MoviesPage> {
         if (vm.loading) return const Center(child: CircularProgressIndicator());
         return vm.error
           ? Center(child: Text("Error recogiendo las series"))
-          : LayoutBuilder(
-              builder: (context, constraints) => ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              scrollDirection: Axis.horizontal,
+          : Padding(
+            padding: EdgeInsets.all(16),
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: kIsWeb
+                  ? 8
+                  : 4,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 9/16,
+              ), 
               itemCount: vm.movies.length,
-              itemBuilder: (_, i) => Padding(
-                padding: EdgeInsets.only(right: i == vm.movies.length - 1 ? 0 : 12),
-                child: SerieFilmCard(
+              itemBuilder: (_, i) {
+                return SerieFilmCard(
                   id: vm.movies[i].film.id, 
                   title: vm.movies[i].film.title, 
                   imageUrl: vm.movies[i].film.coverUrl, 
                   duration: vm.movies[i].film.durationSeconds, 
                   progress: vm.movies[i].userState.watchedSeconds,
                   isSerie: false,
-                ),
-              ) 
+                );
+              }
             ),
           );
       }),

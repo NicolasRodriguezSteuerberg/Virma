@@ -40,9 +40,6 @@ class BrowseSeriesViewmodel extends ChangeNotifier{
       final List<dynamic> seriesDynamicResponse = responseBody["content"]??[];
       final List<Series> seriesResponse = seriesDynamicResponse.map((item) => Series.fromJson(item)).toList();
       _series = seriesResponse;
-      for (int i = 0; i < seriesResponse.length; i++) {
-        print("COVER_URL ${seriesResponse[i].coverUrl}");
-      }
     } catch (e) {
       _error = true;
       print(e);

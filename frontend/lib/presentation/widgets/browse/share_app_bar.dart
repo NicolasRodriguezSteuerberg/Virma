@@ -10,6 +10,7 @@ class ShareAppBar extends StatelessWidget implements PreferredSizeWidget{
   Widget build(BuildContext context) {
     // TODO: implement build
     return AppBar(
+      automaticallyImplyLeading: false,
       title: Text("Virma"),
       actions: [
         _NavButton("Series", "/series", currentRoute),

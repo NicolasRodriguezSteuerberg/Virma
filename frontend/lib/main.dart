@@ -106,7 +106,6 @@ class MyApp extends StatelessWidget {
           GoRoute(
             path: "/watch/movie/:id",
             builder: (context, state) {
-              print("HOLAAA????");
               final String args = state.pathParameters["id"]!;
               return ChangeNotifierProvider(
                 create: (_) => WatchMovieViewmodel(auth),

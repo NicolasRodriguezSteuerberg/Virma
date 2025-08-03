@@ -43,7 +43,6 @@ class _VideoState extends State<WatchPage>{
   }
 
   void onUserEvent() {
-    print("hola, $_showControls");
     if (_hideTimer != null) {
       _hideTimer!.cancel();
     }
