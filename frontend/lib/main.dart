@@ -138,10 +138,11 @@ class MyApp extends StatelessWidget {
           GoRoute(
             path: "/serie/:id",
             builder: (context, state) {
-              final String args = state.pathParameters["id"]!;
+              final int id = int.parse(state.pathParameters["id"]!);
               return ChangeNotifierProvider(
-                create: (_) => SerieViewmodel(int.parse(args)),
-                child: SeriePage(key: ValueKey(int.parse(args))),
+                key: ValueKey(id),
+                create: (_) => SerieViewmodel(id),
+                child: SeriePage(),
               );
             },
           ),
