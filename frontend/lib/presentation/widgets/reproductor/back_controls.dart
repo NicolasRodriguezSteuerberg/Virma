@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:frontend/presentation/viewmodels/watch_common_viewmodel.dart';
 
 class BackControls extends StatelessWidget{
-  final String route;
-  const BackControls({required this.route, super.key});
+  final WatchCommonViewmodel vm;
+  const BackControls({required this.vm, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class BackControls extends StatelessWidget{
       color: Colors.black45,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: IconButton(
-        onPressed: () => context.go(route),
+        onPressed: () => vm.onBackButtonPressed(context),
         icon: Icon(
           Icons.arrow_back,
           color: Colors.white

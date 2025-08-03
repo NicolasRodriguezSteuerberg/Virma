@@ -27,7 +27,12 @@ class VideoControlsOverlay extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               LeftControlButtons(vm: vm),
-              Text(vm.title??""),
+              Text(
+                vm.title??"",
+                style: TextStyle(
+                  fontSize: 22
+                ),
+              ),
               RightControlsButtons(vm: vm)
             ],
           )

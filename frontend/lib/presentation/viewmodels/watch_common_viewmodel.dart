@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend/data/model/watch_movie.dart';
 import 'package:frontend/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:video_player/video_player.dart';
@@ -32,6 +33,7 @@ abstract class WatchCommonViewmodel extends ChangeNotifier {
   Timer? _hideTimer;
   Timer? _watchTimer;
   String? _title = null;
+  String? _backUrl = null;
 
   bool get loading => _loading;
   bool get error => _error;
@@ -46,6 +48,7 @@ abstract class WatchCommonViewmodel extends ChangeNotifier {
   Future<void> fetchAndInitController(String id);
   void changeToNextEpisode(BuildContext context);
   Future<void> updateWatchTime();
+  void onBackButtonPressed(BuildContext context);
 
   void setTitle(String title) {
     _title = title;

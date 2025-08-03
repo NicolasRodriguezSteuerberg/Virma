@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:frontend/data/model/watch_movie.dart';
 import 'package:frontend/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:frontend/presentation/viewmodels/watch_common_viewmodel.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:video_player/video_player.dart';
 
-class MovieWatchViewmodel extends WatchCommonViewmodel {
+class WatchMovieViewmodel extends WatchCommonViewmodel {
 
-  MovieWatchViewmodel(AuthProvider auth): super(auth: auth, isSerie: false);
+  WatchMovieViewmodel(AuthProvider auth): super(auth: auth, isSerie: false);
 
   WatchMovie? _info;
   WatchMovie? get movie => _info;
@@ -42,6 +43,7 @@ class MovieWatchViewmodel extends WatchCommonViewmodel {
         }
         setController(controller);
         startHideTimer();
+        setTitle(_info!.film.title);
       }
 
       setLoaded();
@@ -74,6 +76,11 @@ class MovieWatchViewmodel extends WatchCommonViewmodel {
     if (request.statusCode!=200) {
       print("error modificando el tiempo visto de la serie: ${request.body}");
     }
+  }
+
+  @override
+  void onBackButtonPressed(BuildContext context) {
+    context.go("/movies");
   }
 
 }

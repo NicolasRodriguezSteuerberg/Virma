@@ -47,6 +47,7 @@ class WatchSerieViewmodel extends WatchCommonViewmodel {
       startHideTimer();
 
       setController(_controller);
+      setTitle("Captiulo ${_info!.episodeId}");
     } catch (e) {
       print(e);
       setError(true);
@@ -84,6 +85,11 @@ class WatchSerieViewmodel extends WatchCommonViewmodel {
     if (request.statusCode!=200) {
       print("error modificando el tiempo visto de la serie: ${request.body}");
     }
+  }
+
+  @override
+  void onBackButtonPressed(BuildContext context) {
+    context.go("/serie/${_info!.serieId}");
   }
   
 }

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/config/url_strategy/url_strategy.dart';
 import 'package:frontend/presentation/pages/login_page.dart';
-import 'package:frontend/presentation/pages/movie_watch_page.dart';
+import 'package:frontend/presentation/pages/watch_movie_page.dart';
 import 'package:frontend/presentation/pages/movies_page.dart';
 import 'package:frontend/presentation/pages/serie_page.dart';
-import 'package:frontend/presentation/pages/serie_watch_page.dart';
+import 'package:frontend/presentation/pages/watch_serie_page.dart';
 import 'package:frontend/presentation/pages/series_page.dart';
 import 'package:frontend/presentation/pages/splash_page.dart';
 import 'package:frontend/presentation/viewmodels/auth_viewmodel.dart';
-import 'package:frontend/presentation/viewmodels/movie_watch_viewmodel.dart';
+import 'package:frontend/presentation/viewmodels/watch_movie_viewmodel.dart';
 import 'package:frontend/presentation/viewmodels/movies_viewmodel.dart';
 import 'package:frontend/presentation/viewmodels/browse_series_viewmodel.dart';
 import 'package:frontend/presentation/viewmodels/serie_viewmodel.dart';
@@ -33,56 +33,6 @@ void main() async{
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
-  /*
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Virma",
-      routes: {
-        "/series": (_) => ChangeNotifierProvider(
-          create: (_) => SeriesViewmodel(),
-          child: SeriesPage(),
-        ),
-        "/movies": (_) => ChangeNotifierProvider(
-          create: (_) => MoviesViewmodel(),
-          child: MoviesPage(),
-        ),
-        "/watch/movie": (context) => MovieWatchPage()
-      },
-      initialRoute: "/series",
-    );
-  }
-  
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return MaterialApp(
-      title: "Virma",
-      initialRoute: "/series",
-      onGenerateRoute: (settings) {
-        switch(settings.name) {
-          case '/':
-          case '/series':
-            return MaterialPageRoute(
-              builder: (_) => ChangeNotifierProvider(
-                create: (_) => SeriesViewmodel(),
-                child: SeriesPage()
-              )
-            );
-          case '/movies':
-            return MaterialPageRoute(
-              builder: (_) => ChangeNotifierProvider(
-                create: (_) => MoviesViewmodel(),
-                child: MoviesPage()
-              )
-            );
-
-        }
-      },
-    );
-  }
-  */
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);
@@ -159,8 +109,8 @@ class MyApp extends StatelessWidget {
               print("HOLAAA????");
               final String args = state.pathParameters["id"]!;
               return ChangeNotifierProvider(
-                create: (_) => MovieWatchViewmodel(auth),
-                child: MovieWatchPage(filmId: args,),
+                create: (_) => WatchMovieViewmodel(auth),
+                child: WatchMoviePage(filmId: args),
               );
             }
           ),
@@ -170,7 +120,7 @@ class MyApp extends StatelessWidget {
               final String args = state.pathParameters["episodeId"]!;
               return ChangeNotifierProvider(
                 create: (_) => WatchSerieViewmodel(auth),
-                child: SerieWatchPage(episodeId: args),
+                child: WatchSeriePage(episodeId: args),
               );
             },
           ),
