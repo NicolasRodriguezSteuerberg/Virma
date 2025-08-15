@@ -212,7 +212,7 @@ public class SerieServiceImpl implements ISerieService {
                 .id(serie.getId())
                 .title(serie.getTitle())
                 .description(serie.getDescription())
-                .coverUrl(serie.getCoverUrl())
+                .coverUrl(commonMediaService.createUrlByEndpoint(serie.getCoverUrl()))
                 .build();
     }
 
@@ -237,7 +237,7 @@ public class SerieServiceImpl implements ISerieService {
                 .durationSeconds(episode.getDurationSeconds())
                 .userWatchedSeconds(watchedSeconds)
                 .number(episode.getNumber())
-                .coverUrl(episode.getCoverUrl())
+                .coverUrl(commonMediaService.createUrlByEndpoint(episode.getCoverUrl()))
                 .build();
     }
 

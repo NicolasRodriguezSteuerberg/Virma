@@ -2,75 +2,31 @@ package com.nsteuerberg.backend.virma.service.implementation;
 
 import com.nsteuerberg.backend.virma.persistance.entity.movies.FilmEntity;
 import com.nsteuerberg.backend.virma.persistance.entity.movies.UserFilmEntity;
+import com.nsteuerberg.backend.virma.persistance.entity.movies.UserFilmId;
 import com.nsteuerberg.backend.virma.persistance.repository.movie.IFilmRepository;
 import com.nsteuerberg.backend.virma.persistance.repository.movie.IUserFilmRepository;
 import com.nsteuerberg.backend.virma.presentation.dto.request.FilmCreateRequest;
 import com.nsteuerberg.backend.virma.presentation.dto.response.*;
 import com.nsteuerberg.backend.virma.service.interfaces.IFilmService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class FilmServiceImpl implements IFilmService {
     private final IFilmRepository filmRepository;
     private final IUserFilmRepository userFilmRepository;
-    private final RestTemplate restTemplate;
+    private final CommonMediaServiceImpl commonMediaService;
 
-    @Value("${nginx.server.url}")
-    private String nginxBaseUrl;
-
-    public FilmServiceImpl(IFilmRepository filmRepository, IUserFilmRepository userFilmRepository) {
+    public FilmServiceImpl(IFilmRepository filmRepository, IUserFilmRepository userFilmRepository, CommonMediaServiceImpl commonMediaService) {
         this.filmRepository = filmRepository;
         this.userFilmRepository = userFilmRepository;
-        this.restTemplate = new RestTemplate();
-    }
-
-    public boolean isUrlValid(String url) {
-        boolean isValid = false;
-        try {
-            URL parsedUrl = new URL(url);
-            isValid = isValidServer(parsedUrl);
-            if (isValid) isValid = filmUrlExists(parsedUrl);
-        } catch (Exception e){
-            isValid = false;
-            System.out.println(e);
-        }
-        return isValid;
-    }
-
-    private boolean isValidServer(URL url) {
-        String route = url.getProtocol() + "://" + url.getHost() + ":" + url.getPort();
-        System.out.println(nginxBaseUrl);
-        return nginxBaseUrl.equals(route);
-    }
-
-    private boolean filmUrlExists(URL url) {
-        try {
-            ResponseEntity<?> response = restTemplate.exchange(url.toURI(), HttpMethod.GET, null, String.class);
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new Exception("No ha sido satisfactoria");
-            }
-            String headerContentType = response.getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
-            if (headerContentType == null || !headerContentType.toLowerCase().contains("mpegurl")){
-                throw new Exception("No es un fichero correcto");
-            }
-
-            return true;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
+        this.commonMediaService = commonMediaService;
     }
 
     @Override
@@ -106,6 +62,26 @@ public class FilmServiceImpl implements IFilmService {
         );
     }
 
+    public FilmUserResponse getFilmById(Long filmId, Long userId) {
+        FilmEntity film = filmRepository.findById(filmId).orElseThrow();
+        Optional<UserFilmEntity> userFilm = userFilmRepository.findById(new UserFilmId(userId, filmId));
+        return new FilmUserResponse(
+            FilmResponse.builder()
+                  .id(film.getId())
+                  .title(film.getTitle())
+                  .durationSeconds(film.getDurationSeconds())
+                  .fileUrl(commonMediaService.createUrlByEndpoint(film.getFileUrl()))
+                  .coverUrl(commonMediaService.createUrlByEndpoint(film.getCoverUrl()))
+                  .build(),
+            userFilm.isPresent()
+                ? new UserFilmStateResponse(
+                    userFilm.get().getLiked(),
+                    userFilm.get().getWatchedSeconds()
+                )
+                : null
+        );
+    }
+
     private List<FilmUserResponse> mapUserFilms(List<FilmEntity> filmEntities, List<UserFilmEntity> userFilmEntities) {
         // creamos un mapa para que sea mas facil acceder a la info de la peli, cogiendo como clave el id de la pelicula
         Map<Long, UserFilmEntity> userFilmMap = userFilmEntities.stream()
@@ -123,8 +99,8 @@ public class FilmServiceImpl implements IFilmService {
                                     .id(film.getId())
                                     .title(film.getTitle())
                                     .description(film.getDescription())
-                                    .coverUrl(film.getCoverUrl())
-                                    .fileUrl(film.getFileUrl())
+                                    .coverUrl(commonMediaService.createUrlByEndpoint(film.getCoverUrl()))
+                                    .fileUrl(commonMediaService.createUrlByEndpoint(film.getFileUrl()))
                                     .durationSeconds(film.getDurationSeconds())
                                     .build(),
                             new UserFilmStateResponse(

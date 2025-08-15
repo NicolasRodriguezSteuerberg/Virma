@@ -44,6 +44,7 @@ public class CommonMediaServiceImpl implements ICommonMediaService {
 
     @Override
     public String createUrlByEndpoint(String endpoint) {
+        if (endpoint == null) return null;
         return nginxBaseUrl + endpoint;
     }
 
