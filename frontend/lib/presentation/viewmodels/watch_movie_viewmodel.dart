@@ -24,7 +24,13 @@ class WatchMovieViewmodel extends WatchCommonViewmodel {
     notifyListeners();
 
     try {
-      final response = await http.get(Uri.parse("$backendUrl/movie/$id"));
+      final response = await http.get(
+        Uri.parse("$backendUrl/movie/$id"), 
+        headers: {
+          'Content-type': 'application/json',
+          "Authorization": "Bearer ${auth.accessToken}"
+        }
+      );
       final responseBody = jsonDecode(response.body);
       _info = WatchMovie.fromJson(responseBody);
 
@@ -38,8 +44,8 @@ class WatchMovieViewmodel extends WatchCommonViewmodel {
           notifyListeners();
         });
 
-        if (_info!.userState != null && _info!.userState!.watchedSeconds > 0) {
-          controller.seekTo(Duration(seconds: _info!.userState!.watchedSeconds));
+        if (_info!.userState != null && _info!.userState!.watchedSeconds != null && _info!.userState!.watchedSeconds! > 0) {
+          controller.seekTo(Duration(seconds: _info!.userState!.watchedSeconds!));
         }
         setController(controller);
         startHideTimer();
@@ -62,7 +68,7 @@ class WatchMovieViewmodel extends WatchCommonViewmodel {
   @override
   Future<void> updateWatchTime() async {
     final request = await http.post(
-      Uri.parse("$backendUrl/watch/episode"),
+      Uri.parse("$backendUrl/watch/movie"),
       headers: {
         'Content-type': 'application/json',
         'Authorization': 'Bearer ${auth.accessToken}'

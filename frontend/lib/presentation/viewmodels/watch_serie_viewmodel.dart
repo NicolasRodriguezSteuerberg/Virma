@@ -27,8 +27,13 @@ class WatchSerieViewmodel extends WatchCommonViewmodel {
     notifyListeners();
 
     try {
-      final response = await http.get(Uri.parse("$backendUrl/series/episode/$id"));
-      if (!(response.statusCode >= 200 && response.statusCode < 300)) throw Exception("La peticion no ha sido exitosa");
+      final response = await http.get(
+        Uri.parse("$backendUrl/series/episode/$id"),
+        headers: {
+          "Authorization": "Bearer ${auth.accessToken}"
+        }
+      );
+      if (!(response.statusCode >= 200 && response.statusCode < 300)) throw Exception("La peticion no ha sido exitosa, ${response.statusCode}, ${response.body}");
       final responseBody = jsonDecode(response.body);
       _info = WatchEpisode.fromJson(responseBody);
       setTitle("Capitulo ${_info!.episodeId}");

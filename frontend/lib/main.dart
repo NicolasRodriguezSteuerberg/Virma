@@ -81,7 +81,7 @@ class MyApp extends StatelessWidget {
           GoRoute(
             path: "/series",
             builder: (context, state) => ChangeNotifierProvider(
-              create: (_) => BrowseSeriesViewmodel(),
+              create: (_) => BrowseSeriesViewmodel(auth),
               child: const SeriesPage(),
             ),
           ),
@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
               final int id = int.parse(state.pathParameters["id"]!);
               return ChangeNotifierProvider(
                 key: ValueKey(id),
-                create: (_) => SerieViewmodel(id),
+                create: (_) => SerieViewmodel(id, auth),
                 child: SeriePage(),
               );
             },
@@ -99,7 +99,7 @@ class MyApp extends StatelessWidget {
           GoRoute(
             path: "/movies",
             builder: (context, state) => ChangeNotifierProvider(
-              create: (_) => MoviesViewmodel(),
+              create: (_) => MoviesViewmodel(auth),
               child: const MoviesPage(),
             ),
           ),

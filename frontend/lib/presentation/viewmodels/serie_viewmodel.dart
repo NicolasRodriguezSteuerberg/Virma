@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:frontend/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -8,6 +9,7 @@ import 'package:frontend/data/model/serie_info.dart';
 class SerieViewmodel extends ChangeNotifier {
   late String backendUrl;
   int serieId;
+  final AuthProvider auth;
 
   bool _loading = false;
   bool _error = false;
@@ -17,7 +19,7 @@ class SerieViewmodel extends ChangeNotifier {
   SerieInfo? get serie => _serie;
   bool get error => _error;
 
-  SerieViewmodel(this.serieId){
+  SerieViewmodel(this.serieId, this.auth){
     backendUrl = dotenv.env["BACKEND_URL"]??"http://localhost:8080/virma/api";
   }
 
@@ -26,7 +28,13 @@ class SerieViewmodel extends ChangeNotifier {
     _error = false;
     notifyListeners();
     try {
-      final response = await http.get(Uri.parse("$backendUrl/series/info/$serieId"));
+      print("hola");
+      final response = await http.get(
+        Uri.parse("$backendUrl/series/info/$serieId"),
+        headers: {
+          "Authorization": "Bearer ${auth.accessToken}"
+        }
+      );
       if (response.statusCode != 200) throw Exception("No se pudo recoger la serie");
       final responseBody = jsonDecode(response.body);
       _serie = SerieInfo.fromJson(responseBody);

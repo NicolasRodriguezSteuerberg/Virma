@@ -18,7 +18,7 @@ class AuthProvider extends ChangeNotifier {
 
   AuthProvider() {
     backendUrl = dotenv.env["BACKEND_URL"] ?? "http://192.168.1.38:8080:8081/api/auth";
-    backendUrl = "http://192.168.1.38:8081/api/auth";
+    backendUrl = "http://10.115.68.103:8081/api/auth";
     _init();
   }
 

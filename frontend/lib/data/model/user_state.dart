@@ -1,6 +1,6 @@
 class UserState {
   bool? liked;
-  int watchedSeconds;
+  int? watchedSeconds;
 
   UserState(this.liked, this.watchedSeconds);
 
