@@ -8,6 +8,7 @@ import com.nsteuerberg.backend.virma.service.implementation.FilmServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
@@ -35,15 +36,21 @@ public class FilmController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public PagedResponse<FilmUserResponse> getFilms(Pageable pageable) {
-        // ToDo recoger el id del usuario con la autenticacion
-        return filmService.getPagenableFilm(pageable, 1L);
+    public PagedResponse<FilmUserResponse> getFilms(
+            Pageable pageable,
+            Authentication authentication
+    ) {
+        Long userId = Long.parseLong(authentication.getPrincipal().toString());
+        return filmService.getPagenableFilm(pageable, userId);
     }
 
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public FilmUserResponse getFilm(@PathVariable Long id) {
-        // ToDo recoger el id del usario con la autenticacion
-        return filmService.getFilmById(id, 1L);
+    public FilmUserResponse getFilm(
+            @PathVariable Long id,
+            Authentication authentication
+    ) {
+        Long userId = Long.parseLong(authentication.getPrincipal().toString());
+        return filmService.getFilmById(id, userId);
     }
 }

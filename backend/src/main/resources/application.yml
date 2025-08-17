@@ -19,4 +19,4 @@ spring:
       max-request-size: 1GB
 nginx:
   server:
-    url: http://192.168.1.38:9080
+    url: http://10.115.68.103:9080

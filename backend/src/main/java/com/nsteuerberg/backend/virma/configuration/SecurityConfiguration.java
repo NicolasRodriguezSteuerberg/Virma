@@ -17,13 +17,11 @@ import java.util.List;
 // ToDo make it Configuration
 @Configuration
 public class SecurityConfiguration {
-    /*
     private final JwtFilter jwtFilter;
 
     public SecurityConfiguration(JwtFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
     }
-     */
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -33,10 +31,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(requests -> requests
                         // ToDo cambiar el permitir todos
                         // agregar permiso MODERATOR a lo de agregar peliculas y series
-                        .anyRequest().permitAll()
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/virma/api/v3/api-docs/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .cors(Customizer.withDefaults())
-                //.addFilterBefore(jwtFilter, BasicAuthenticationFilter.class)
+                .addFilterBefore(jwtFilter, BasicAuthenticationFilter.class)
                 .sessionManagement(sesion -> sesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }

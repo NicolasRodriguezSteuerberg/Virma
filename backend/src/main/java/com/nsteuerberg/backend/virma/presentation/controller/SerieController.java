@@ -9,6 +9,7 @@ import com.nsteuerberg.backend.virma.service.implementation.SerieServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,26 +24,27 @@ public class SerieController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public PagedResponse<SerieInfoResponse> serieInfoResponsePagedResponse (Pageable pageable) {
-        // ToDo por hacer
         return serieService.getPageableSerieInfo(pageable);
     }
 
     @GetMapping("info/{id}")
     @ResponseStatus(HttpStatus.OK)
     public SerieSeasonEpidoseResponse serieSeasonEpidoseResponse (
-            @PathVariable Long id
+            @PathVariable Long id,
+            Authentication authentication
     ) {
-        // ToDo recoger la info del usuario para poder mostrar si vio algun epidosdio
-        return serieService.getSerieCompleteInfo(id, 1L);
+        Long userId = Long.parseLong(authentication.getPrincipal().toString());
+        return serieService.getSerieCompleteInfo(id, userId);
     }
 
     @GetMapping("episode/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EpisodeReproduceResponse getEpisode(
-            @PathVariable(name = "id") Long episodeId
+            @PathVariable(name = "id") Long episodeId,
+            Authentication authentication
     ) {
-        // ToDo recoger el usuario, 1 para pruebas
-        return serieService.getEpisode(episodeId, 1L);
+        Long userId = Long.parseLong(authentication.getPrincipal().toString());
+        return serieService.getEpisode(episodeId, userId);
     }
 
     @PostMapping

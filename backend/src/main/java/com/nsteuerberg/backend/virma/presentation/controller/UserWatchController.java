@@ -4,6 +4,7 @@ import com.nsteuerberg.backend.virma.presentation.dto.request.FilmWatchedRequest
 import com.nsteuerberg.backend.virma.presentation.dto.request.serie.create.EpisodeWatchedRequest;
 import com.nsteuerberg.backend.virma.service.implementation.UserServiceImpl;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,15 +18,21 @@ public class UserWatchController {
 
     @PostMapping("movie")
     @ResponseStatus(HttpStatus.OK)
-    public void addFilmWatched(@RequestBody FilmWatchedRequest filmWatchedRequest) {
-        // ToDo cambiar para cuando haya autenticacion
-        userService.filmWatched(filmWatchedRequest, 1L);
+    public void addFilmWatched(
+            @RequestBody FilmWatchedRequest filmWatchedRequest,
+            Authentication authentication
+    ) {
+        Long userId = Long.parseLong(authentication.getPrincipal().toString());
+        userService.filmWatched(filmWatchedRequest, userId);
     }
 
     @PostMapping("episode")
     @ResponseStatus(HttpStatus.OK)
-    public void addEpisodeWatched(@RequestBody EpisodeWatchedRequest episodeWatchedRequest) {
-        // ToDo recoger el id del usuario autenticado
-        userService.episodeWatched(1L, episodeWatchedRequest);
+    public void addEpisodeWatched(
+            @RequestBody EpisodeWatchedRequest episodeWatchedRequest,
+            Authentication authentication
+    ) {
+        Long userId = Long.parseLong(authentication.getPrincipal().toString());
+        userService.episodeWatched(userId, episodeWatchedRequest);
     }
 }

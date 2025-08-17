@@ -1,9 +1,11 @@
 package com.nsteuerberg.backend.virma.service.implementation;
 
 import com.nsteuerberg.backend.virma.persistance.entity.UserEntity;
+import com.nsteuerberg.backend.virma.persistance.entity.movies.FilmEntity;
 import com.nsteuerberg.backend.virma.persistance.entity.movies.UserFilmEntity;
 import com.nsteuerberg.backend.virma.persistance.entity.movies.UserFilmId;
 import com.nsteuerberg.backend.virma.persistance.entity.series.*;
+import com.nsteuerberg.backend.virma.persistance.repository.movie.IFilmRepository;
 import com.nsteuerberg.backend.virma.persistance.repository.movie.IUserFilmRepository;
 import com.nsteuerberg.backend.virma.persistance.repository.series.IEpisodeRepository;
 import com.nsteuerberg.backend.virma.persistance.repository.user.IUserEpisodeRepository;
@@ -26,13 +28,15 @@ public class UserServiceImpl implements IUserService {
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final IUserRepository userRepository;
+    private final IFilmRepository filmRepository;
     private final IUserFilmRepository userFilmRepository;
     private final IUserSerieRepository userSerieRepository;
     private final IEpisodeRepository episodeRepository;
     private final IUserEpisodeRepository userEpisodeRepository;
 
-    public UserServiceImpl(IUserRepository userRepository, IUserFilmRepository userFilmRepository, IUserSerieRepository userSerieRepository, IEpisodeRepository episodeRepository, IUserEpisodeRepository userEpisodeRepository) {
+    public UserServiceImpl(IUserRepository userRepository, IFilmRepository filmRepository, IUserFilmRepository userFilmRepository, IUserSerieRepository userSerieRepository, IEpisodeRepository episodeRepository, IUserEpisodeRepository userEpisodeRepository) {
         this.userRepository = userRepository;
+        this.filmRepository = filmRepository;
         this.userFilmRepository = userFilmRepository;
         this.userSerieRepository = userSerieRepository;
         this.episodeRepository = episodeRepository;
@@ -58,13 +62,19 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void filmWatched(FilmWatchedRequest filmWatchedRequest, Long userId) {
-        // ToDo completar
+        FilmEntity film = filmRepository.findById(userId).orElseThrow();
+        if (film.getDurationSeconds() < filmWatchedRequest.watchedSeconds()) throw new IllegalArgumentException("No se puede ver mas segundos de lo que dura la pelicula");
+        log.info("FilmWatched:: Recogiendo o creando entidad de UserFilm...");
         UserFilmId userFilmId = new UserFilmId(userId, filmWatchedRequest.filmId());
-        UserFilmEntity userFilm = userFilmRepository.findById(userFilmId).orElseGet(() -> UserFilmEntity.builder()
+        UserFilmEntity userFilm = userFilmRepository.findById(userFilmId)
+                .orElseGet(() -> UserFilmEntity.builder()
                         .id(userFilmId)
-                .build()
+                        .user(userRepository.findById(userId).orElseThrow())
+                        .film(film)
+                        .build()
         );
-        userFilm.setWatchedSeconds(filmWatchedRequest.secondsWatched());
+        userFilm.setWatchedSeconds(filmWatchedRequest.watchedSeconds());
+        log.info("FilmWatched:: Guardando el tiempo visto de la pelicula del usuario");
         userFilmRepository.save(userFilm);
     }
 
